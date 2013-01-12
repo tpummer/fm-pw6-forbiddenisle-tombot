@@ -7,11 +7,22 @@ import random
 import unittest
 import gameBoard
 import gameRound
+import gameBot
 
 class TestSequenceFunctions(unittest.TestCase):
 
     def setUp(self):
         self.seq = range(10)
+
+    ############### GAMEBOT ###############
+
+    def test_gameBotGetPosition(self):
+        bot = gameBot.gameBot()
+        self.assertEquals(bot.getPosition()[0],0)
+        self.assertEquals(bot.getPosition()[1],0)
+        bot.setPosition(1,1)
+        self.assertEquals(bot.getPosition()[0],1)
+        self.assertEquals(bot.getPosition()[1],1)
 
     ############### GAMEROUND ###############
 
