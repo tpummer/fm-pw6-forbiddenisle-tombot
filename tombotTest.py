@@ -77,6 +77,31 @@ class TestSequenceFunctions(unittest.TestCase):
         app.run()
         self.assertTrue(True)
 
+    def test_reportRound(self):
+        test = []
+        app = g.game(f.fakeInputReader(test))
+        r = gameRound.gameRound()
+        self.assertEqual(r.getRound(),1)
+        bot = gameBot.gameBot()
+        self.assertEquals(bot.getPosition()[0],0)
+        self.assertEquals(bot.getPosition()[1],0)
+        inputText = "ROUND 3 13,21"
+        app.reportRound(inputText,r,bot)
+        self.assertEqual(r.getRound(),3)
+        self.assertEquals(bot.getPosition()[0],13)
+        self.assertEquals(bot.getPosition()[1],21)
+
+    def test_flood(self):
+        test = []
+        app = g.game(f.fakeInputReader(test))
+        self.assertEquals(app.getFlood(),0)
+        app.incrFlood('INCRFLOOD 3')
+        self.assertEquals(app.getFlood(),3)
+        app.incrFlood('INCRFLOOD 0')
+        self.assertEquals(app.getFlood(),3)
+        app.incrFlood('INCRFLOOD 1')
+        self.assertEquals(app.getFlood(),4)
+
     def test_readGameBoard(self):
         testBoard = ["oxf", "jlk", "GAMEBOARDEND", "END"]
         app = g.game(f.fakeInputReader(testBoard))
