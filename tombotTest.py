@@ -6,11 +6,27 @@ import game as g
 import random
 import unittest
 import gameBoard
+import gameRound
 
 class TestSequenceFunctions(unittest.TestCase):
 
     def setUp(self):
         self.seq = range(10)
+
+    ############### GAMEROUND ###############
+
+    def test_gameRoundNextRound(self):
+        r = gameRound.gameRound()
+        r.nextRound()
+        r.nextRound()
+        r.nextRound()
+        self.assertEqual(r.getRound(),4)
+        
+    def test_gameRoundSetRound(self):
+        matchingRound = 10
+        r = gameRound.gameRound()
+        r.setRound(matchingRound)
+        self.assertEqual(r.getRound(),matchingRound)
 
     ############### GAMEBOARD ###############
 

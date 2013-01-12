@@ -1,9 +1,11 @@
 import gameBoard
+import gameRound as r
 
 class game(object):
     def __init__(self, inputReader):
         self.inputReader = inputReader
         self.gameBoard = 1
+        self.round = r.gameRound()
 
     def run(self):
         runningGame = True
