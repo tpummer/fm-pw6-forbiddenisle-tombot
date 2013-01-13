@@ -20,6 +20,15 @@ class gameBoard(object):
         elif(self.getField(x,y) == '.'):
             pass
 
+    def dry(self,x,y):
+        field = self.getField(x,y)
+        if(self.getField(x,y) == '#'):
+            pass
+        elif(self.getField(x,y) == 'o'):
+            self.setField(x,y,'#')
+        elif(self.getField(x,y) == '.'):
+            pass
+
 def newPosition(oldPosition, direction):
     result = list(oldPosition)
     if(direction == d.direction.NORTH):

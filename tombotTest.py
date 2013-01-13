@@ -37,6 +37,21 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertEquals(bot.getPosition()[0],1)
         self.assertEquals(bot.getPosition()[1],0)
 
+    def test_gameBotDry(self):
+        bot = gameBot.gameBot()
+        board = gameBoard.gameBoard(1,1)
+        self.assertEqual(board.getField(0,0), '#')
+        bot.dry(board, d.direction.CURRENT)
+        self.assertEqual(board.getField(0,0), '#')
+        board.setField(0,0,'o')
+        self.assertEqual(board.getField(0,0), 'o')
+        bot.dry(board, d.direction.CURRENT)
+        self.assertEqual(board.getField(0,0), '#')
+        board.setField(0,0,'.')
+        self.assertEqual(board.getField(0,0), '.')
+        bot.dry(board, d.direction.CURRENT)
+        self.assertEqual(board.getField(0,0), '.')
+
     ############### GAMEROUND ###############
 
     def test_gameRoundNextRound(self):
@@ -54,6 +69,30 @@ class TestSequenceFunctions(unittest.TestCase):
 
     ############### GAMEBOARD ###############
 
+    def test_gameBoardDry(self):
+        board = gameBoard.gameBoard(1,1)
+        self.assertEqual(board.getField(0,0), '#')
+        board.dry(0,0)
+        self.assertEqual(board.getField(0,0), '#')
+        board.setField(0,0,'o')
+        self.assertEqual(board.getField(0,0), 'o')
+        board.dry(0,0)
+        self.assertEqual(board.getField(0,0), '#')
+        board.setField(0,0,'.')
+        self.assertEqual(board.getField(0,0), '.')
+        board.dry(0,0)
+        self.assertEqual(board.getField(0,0), '.')
+
+    def test_gameBoardFloodField(self):
+        board = gameBoard.gameBoard(1,1)
+        self.assertEqual(board.getField(0,0), '#')
+        board.floodField(0,0)
+        self.assertEqual(board.getField(0,0), 'o')
+        board.floodField(0,0)
+        self.assertEqual(board.getField(0,0), '.')
+        board.floodField(0,0)
+        self.assertEqual(board.getField(0,0), '.')
+        
     def test_gameBoardNewPosition(self):
         board = gameBoard.gameBoard(3,3)
         self.assertEqual(gameBoard.newPosition((1,1),d.direction.NORTH),(1,0))
@@ -120,7 +159,7 @@ class TestSequenceFunctions(unittest.TestCase):
         app.run()
         self.assertTrue(True)
 
-    def test_reportRound(self):
+    def test_gameReportRound(self):
         test = []
         app = g.game(f.fakeInputReader(test))
         r = gameRound.gameRound()
@@ -146,7 +185,7 @@ class TestSequenceFunctions(unittest.TestCase):
         app.floodField("FLOOD 0,0")
         self.assertEqual(app.getGameBoard().getField(0,0),".")
 
-    def test_flood(self):
+    def test_gameIncrFlood(self):
         test = []
         app = g.game(f.fakeInputReader(test))
         self.assertEquals(app.getFlood(),0)
@@ -157,7 +196,7 @@ class TestSequenceFunctions(unittest.TestCase):
         app.incrFlood('INCRFLOOD 1')
         self.assertEquals(app.getFlood(),4)
 
-    def test_readGameBoard(self):
+    def test_gameReadGameBoard(self):
         testBoard = ["oxf", "jlk", "GAMEBOARDEND", "END"]
         app = g.game(f.fakeInputReader(testBoard))
         board = app.readGameBoard("GAMEBOARDSTART 2,3")

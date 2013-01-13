@@ -14,3 +14,8 @@ class gameBot(object):
         oldPosition = self.getPosition()
         newPosition = b.newPosition(oldPosition,direction)
         self.setPosition(newPosition[0],newPosition[1])
+
+    def dry(self, board, direction):
+        position = self.getPosition()
+        dryPosition = b.newPosition(position,direction)
+        board.dry(dryPosition[0],dryPosition[1])
