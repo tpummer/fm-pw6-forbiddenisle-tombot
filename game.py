@@ -28,6 +28,11 @@ class game(object):
             elif(inputText.startswith('FLOOD')):
                 print "bingo4";
 
+    def floodField(self,inputText):
+        parts = inputText.split(' ')
+        coordinates = parts[1].split(',')
+        self.gameBoard.floodField(int(coordinates[0]),int(coordinates[1]))
+
     def incrFlood(self,inputText):
         additionalValue = int(inputText.split(' ')[1])
         self.flood = self.flood + additionalValue
@@ -68,3 +73,6 @@ class game(object):
 
     def getFlood(self):
         return self.flood
+
+    def getGameBoard(self):
+        return self.gameBoard

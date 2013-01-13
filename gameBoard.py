@@ -4,7 +4,7 @@ class gameBoard(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.fields = [["." for i in range(int(y))] for j in range(int(x))]
+        self.fields = [["#" for i in range(int(y))] for j in range(int(x))]
 
     def setField(self, x, y, value):
         self.fields[x][y] = value
@@ -26,4 +26,11 @@ class gameBoard(object):
             result = result
 
         return tuple(result)
-        
+
+    def floodField(self,x,y):
+        if(self.getField(x,y) == '#'):
+            self.setField(x,y,'o')
+        elif(self.getField(x,y) == 'o'):
+            self.setField(x,y,'.')
+        elif(self.getField(x,y) == '.'):
+            pass
