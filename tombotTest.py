@@ -52,6 +52,12 @@ class TestSequenceFunctions(unittest.TestCase):
         bot.dry(board, d.direction.CURRENT)
         self.assertEqual(board.getField(0,0), '.')
 
+    def test_gameBotMakeTurn(self):
+        bot = gameBot.gameBot()
+        board = gameBoard.gameBoard(1,1)
+        bot.makeTurn(board)
+        self.fail()
+
     ############### GAMEROUND ###############
 
     def test_gameRoundNextRound(self):

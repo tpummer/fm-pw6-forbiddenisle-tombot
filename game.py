@@ -22,7 +22,7 @@ class game(object):
                 self.gameBoard = self.readGameBoard(inputText)
             elif(inputText.startswith('ROUND')):
                 reportRound(inputText, self.round, self.bot)
-                 #TODO make3Moves(gameBoard, input);
+                bot.makeTurn(board)
             elif(inputText.startswith('INCRFLOOD')):
                 incrFlood(inputText);
             elif(inputText.startswith('FLOOD')):
