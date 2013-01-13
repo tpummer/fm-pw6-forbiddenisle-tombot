@@ -25,6 +25,18 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertEquals(bot.getPosition()[0],1)
         self.assertEquals(bot.getPosition()[1],1)
 
+    def test_gameBotGo(self):
+        bot = gameBot.gameBot()
+        bot.setPosition(1,1)
+        self.assertEquals(bot.getPosition()[0],1)
+        self.assertEquals(bot.getPosition()[1],1)
+        bot.go(d.direction.NORTH)
+        self.assertEquals(bot.getPosition()[0],1)
+        self.assertEquals(bot.getPosition()[1],0)
+        bot.go(d.direction.CURRENT)
+        self.assertEquals(bot.getPosition()[0],1)
+        self.assertEquals(bot.getPosition()[1],0)
+
     ############### GAMEROUND ###############
 
     def test_gameRoundNextRound(self):
@@ -44,11 +56,11 @@ class TestSequenceFunctions(unittest.TestCase):
 
     def test_gameBoardNewPosition(self):
         board = gameBoard.gameBoard(3,3)
-        self.assertEqual(board.newPosition((1,1),d.direction.NORTH),(1,0))
-        self.assertEqual(board.newPosition((1,1),d.direction.EAST),(2,1))
-        self.assertEqual(board.newPosition((1,1),d.direction.SOUTH),(1,2))
-        self.assertEqual(board.newPosition((1,1),d.direction.WEST),(0,1))
-        self.assertEqual(board.newPosition((1,1),d.direction.CURRENT),(1,1))
+        self.assertEqual(gameBoard.newPosition((1,1),d.direction.NORTH),(1,0))
+        self.assertEqual(gameBoard.newPosition((1,1),d.direction.EAST),(2,1))
+        self.assertEqual(gameBoard.newPosition((1,1),d.direction.SOUTH),(1,2))
+        self.assertEqual(gameBoard.newPosition((1,1),d.direction.WEST),(0,1))
+        self.assertEqual(gameBoard.newPosition((1,1),d.direction.CURRENT),(1,1))
 
     def test_gameBoardSize(self):
         board = gameBoard.gameBoard(4,10)

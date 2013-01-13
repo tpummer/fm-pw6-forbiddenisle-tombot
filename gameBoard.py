@@ -12,21 +12,6 @@ class gameBoard(object):
     def getField(self, x, y):
         return self.fields[x][y]
 
-    def newPosition(self, oldPosition, direction):
-        result = list(oldPosition)
-        if(direction == d.direction.NORTH):
-            result[1] = result[1] -1
-        elif(direction == d.direction.EAST):
-            result[0] = result[0] +1
-        elif(direction == d.direction.SOUTH):
-            result[1] = result[1] +1
-        elif(direction == d.direction.WEST):
-            result[0] = result[0] -1
-        elif(direction == d.direction.CURRENT):
-            result = result
-
-        return tuple(result)
-
     def floodField(self,x,y):
         if(self.getField(x,y) == '#'):
             self.setField(x,y,'o')
@@ -34,3 +19,18 @@ class gameBoard(object):
             self.setField(x,y,'.')
         elif(self.getField(x,y) == '.'):
             pass
+
+def newPosition(oldPosition, direction):
+    result = list(oldPosition)
+    if(direction == d.direction.NORTH):
+        result[1] = result[1] -1
+    elif(direction == d.direction.EAST):
+        result[0] = result[0] +1
+    elif(direction == d.direction.SOUTH):
+        result[1] = result[1] +1
+    elif(direction == d.direction.WEST):
+        result[0] = result[0] -1
+    elif(direction == d.direction.CURRENT):
+        result = result
+
+    return tuple(result)
