@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
 import os, sys, string
-import rawInputReader as r
+import inputReader as reader
 import game as g
 
 def main(argv):
-    app = g.game(r.rawInputReader())
+    app = g.game(reader.rawInputReader())
     app.run()
 
 if __name__ == "__main__":

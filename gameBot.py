@@ -1,5 +1,6 @@
 import gameBoard as b
 import direction as d
+import sys
 
 class gameBot(object):
     def __init__(self):
@@ -21,10 +22,14 @@ class gameBot(object):
         dryPosition = b.newPosition(position,direction)
         board.dry(dryPosition[0],dryPosition[1])
 
+    ## NOUNITTEST only executes strategy
     def makeTurn(self, board):
         print "DRY CURRENT"
+        sys.stdout.flush()
         self.dry(board, d.direction.CURRENT)
         print "DRY CURRENT"
+        sys.stdout.flush()
         self.dry(board, d.direction.CURRENT)
         print "DRY CURRENT"
+        sys.stdout.flush()
         self.dry(board, d.direction.CURRENT)
