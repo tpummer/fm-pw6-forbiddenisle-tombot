@@ -6,7 +6,7 @@ import inputReader as reader
 class game(object):
     def __init__(self, inputReader):
         self.inputReader = inputReader
-        self.gameBoard = 1
+        self.gameBoard = gameBoard.gameBoard(1,1)
         self.round = r.gameRound()
         self.bot = bot.gameBot()
         self.flood = 0
@@ -43,7 +43,7 @@ class game(object):
         parts = inputText.split(' ')
         r.setRound(int(parts[1]))
         coordinates = reader.coordinateTextToTuple(parts[2])
-        bot.setPosition(coordinates[0],coordinates[1])
+        bot.setField(self.gameBoard.getField(coordinates[0],coordinates[1]))
 
     def readGameBoard(self,startline):
         readBoard = True

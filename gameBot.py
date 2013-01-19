@@ -4,22 +4,25 @@ import sys
 
 class gameBot(object):
     def __init__(self):
-        self.position = (0,0)
+        self.field = b.field(0,0,'#')
+        pass
 
-    def setPosition(self, x,y):
-        self.position = (x,y)
+    def setField(self, field):
+        self.field = field
 
-    def getPosition(self):
-        return self.position
+    def getField(self):
+        return self.field
 
-    def go(self, direction):
-        oldPosition = self.getPosition()
-        newPosition = b.newPosition(oldPosition,direction)
-        self.setPosition(newPosition[0],newPosition[1])
+    def go(self, board, direction):
+        field = self.getField()
+        newPosition = b.newPosition((field.getX(),field.getY()),direction)
+        newField = board.getField(newPosition[0],newPosition[1])
+        self.setField(newField)
 
+    #TODO TEST
     def dry(self, board, direction):
-        position = self.getPosition()
-        dryPosition = b.newPosition(position,direction)
+        field = self.getField()
+        dryPosition = b.newPosition((field.getX(),field.getY()),direction)
         board.dry(dryPosition[0],dryPosition[1])
 
     ## NOUNITTEST only executes strategy

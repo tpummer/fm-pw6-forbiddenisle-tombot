@@ -17,40 +17,41 @@ class TestSequenceFunctions(unittest.TestCase):
 
     ############### GAMEBOT ###############
 
-    def test_gameBotGetPosition(self):
+    def test_gameBotGetField(self):
         bot = gameBot.gameBot()
-        self.assertEquals(bot.getPosition()[0],0)
-        self.assertEquals(bot.getPosition()[1],0)
-        bot.setPosition(1,1)
-        self.assertEquals(bot.getPosition()[0],1)
-        self.assertEquals(bot.getPosition()[1],1)
+        self.assertEquals(bot.getField().getX(),0)
+        self.assertEquals(bot.getField().getY(),0)
+        bot.setField(gameBoard.field(1,1,'#'))
+        self.assertEquals(bot.getField().getX(),1)
+        self.assertEquals(bot.getField().getY(),1)
 
     def test_gameBotGo(self):
         bot = gameBot.gameBot()
-        bot.setPosition(1,1)
-        self.assertEquals(bot.getPosition()[0],1)
-        self.assertEquals(bot.getPosition()[1],1)
-        bot.go(d.direction.NORTH)
-        self.assertEquals(bot.getPosition()[0],1)
-        self.assertEquals(bot.getPosition()[1],0)
-        bot.go(d.direction.CURRENT)
-        self.assertEquals(bot.getPosition()[0],1)
-        self.assertEquals(bot.getPosition()[1],0)
+        board = gameBoard.gameBoard(3,3)
+        bot.setField(board.getField(1,1))
+        self.assertEquals(bot.getField().getX(),1)
+        self.assertEquals(bot.getField().getY(),1)
+        bot.go(board, d.direction.NORTH)
+        self.assertEquals(bot.getField().getX(),1)
+        self.assertEquals(bot.getField().getY(),0)
+        bot.go(board, d.direction.CURRENT)
+        self.assertEquals(bot.getField().getX(),1)
+        self.assertEquals(bot.getField().getY(),0)
 
     def test_gameBotDry(self):
         bot = gameBot.gameBot()
         board = gameBoard.gameBoard(1,1)
-        self.assertEqual(board.getField(0,0), '#')
+        self.assertEqual(board.getField(0,0).getValue(), '#')
         bot.dry(board, d.direction.CURRENT)
-        self.assertEqual(board.getField(0,0), '#')
+        self.assertEqual(board.getField(0,0).getValue(), '#')
         board.setField(0,0,'o')
-        self.assertEqual(board.getField(0,0), 'o')
+        self.assertEqual(board.getField(0,0).getValue(), 'o')
         bot.dry(board, d.direction.CURRENT)
-        self.assertEqual(board.getField(0,0), '#')
+        self.assertEqual(board.getField(0,0).getValue(), '#')
         board.setField(0,0,'.')
-        self.assertEqual(board.getField(0,0), '.')
+        self.assertEqual(board.getField(0,0).getValue(), '.')
         bot.dry(board, d.direction.CURRENT)
-        self.assertEqual(board.getField(0,0), '.')
+        self.assertEqual(board.getField(0,0).getValue(), '.')
 
     ############### GAMEROUND ###############
 
@@ -71,27 +72,27 @@ class TestSequenceFunctions(unittest.TestCase):
 
     def test_gameBoardDry(self):
         board = gameBoard.gameBoard(1,1)
-        self.assertEqual(board.getField(0,0), '#')
+        self.assertEqual(board.getField(0,0).getValue(), '#')
         board.dry(0,0)
-        self.assertEqual(board.getField(0,0), '#')
+        self.assertEqual(board.getField(0,0).getValue(), '#')
         board.setField(0,0,'o')
-        self.assertEqual(board.getField(0,0), 'o')
+        self.assertEqual(board.getField(0,0).getValue(), 'o')
         board.dry(0,0)
-        self.assertEqual(board.getField(0,0), '#')
+        self.assertEqual(board.getField(0,0).getValue(), '#')
         board.setField(0,0,'.')
-        self.assertEqual(board.getField(0,0), '.')
+        self.assertEqual(board.getField(0,0).getValue(), '.')
         board.dry(0,0)
-        self.assertEqual(board.getField(0,0), '.')
+        self.assertEqual(board.getField(0,0).getValue(), '.')
 
     def test_gameBoardFloodField(self):
         board = gameBoard.gameBoard(1,1)
-        self.assertEqual(board.getField(0,0), '#')
+        self.assertEqual(board.getField(0,0).getValue(), '#')
         board.floodField(0,0)
-        self.assertEqual(board.getField(0,0), 'o')
+        self.assertEqual(board.getField(0,0).getValue(), 'o')
         board.floodField(0,0)
-        self.assertEqual(board.getField(0,0), '.')
+        self.assertEqual(board.getField(0,0).getValue(), '.')
         board.floodField(0,0)
-        self.assertEqual(board.getField(0,0), '.')
+        self.assertEqual(board.getField(0,0).getValue(), '.')
         
     def test_gameBoardNewPosition(self):
         board = gameBoard.gameBoard(3,3)
@@ -108,37 +109,37 @@ class TestSequenceFunctions(unittest.TestCase):
 
     def test_gameBoardSetValue(self):
         board = gameBoard.gameBoard(2,2)
-        self.assertEqual(board.getField(0,0), '#')
-        self.assertEqual(board.getField(0,1), '#')
-        self.assertEqual(board.getField(1,0), '#')
-        self.assertEqual(board.getField(1,1), '#')
+        self.assertEqual(board.getField(0,0).getValue(), '#')
+        self.assertEqual(board.getField(0,1).getValue(), '#')
+        self.assertEqual(board.getField(1,0).getValue(), '#')
+        self.assertEqual(board.getField(1,1).getValue(), '#')
         board.setField(1,0,'!')
-        self.assertEqual(board.getField(0,0), '#')
-        self.assertEqual(board.getField(0,1), '#')
-        self.assertEqual(board.getField(1,0), '!')
-        self.assertEqual(board.getField(1,1), '#')
+        self.assertEqual(board.getField(0,0).getValue(), '#')
+        self.assertEqual(board.getField(0,1).getValue(), '#')
+        self.assertEqual(board.getField(1,0).getValue(), '!')
+        self.assertEqual(board.getField(1,1).getValue(), '#')
 
     def test_gameBoardSetValue(self):
         board = gameBoard.gameBoard(2,2)
-        self.assertEqual(board.getField(0,0), '#')
-        self.assertEqual(board.getField(0,1), '#')
-        self.assertEqual(board.getField(1,0), '#')
-        self.assertEqual(board.getField(1,1), '#')
+        self.assertEqual(board.getField(0,0).getValue(), '#')
+        self.assertEqual(board.getField(0,1).getValue(), '#')
+        self.assertEqual(board.getField(1,0).getValue(), '#')
+        self.assertEqual(board.getField(1,1).getValue(), '#')
         board.floodField(1,0)
-        self.assertEqual(board.getField(0,0), '#')
-        self.assertEqual(board.getField(0,1), '#')
-        self.assertEqual(board.getField(1,0), 'o')
-        self.assertEqual(board.getField(1,1), '#')
+        self.assertEqual(board.getField(0,0).getValue(), '#')
+        self.assertEqual(board.getField(0,1).getValue(), '#')
+        self.assertEqual(board.getField(1,0).getValue(), 'o')
+        self.assertEqual(board.getField(1,1).getValue(), '#')
         board.floodField(1,0)
-        self.assertEqual(board.getField(0,0), '#')
-        self.assertEqual(board.getField(0,1), '#')
-        self.assertEqual(board.getField(1,0), '.')
-        self.assertEqual(board.getField(1,1), '#')
+        self.assertEqual(board.getField(0,0).getValue(), '#')
+        self.assertEqual(board.getField(0,1).getValue(), '#')
+        self.assertEqual(board.getField(1,0).getValue(), '.')
+        self.assertEqual(board.getField(1,1).getValue(), '#')
         board.floodField(1,0)
-        self.assertEqual(board.getField(0,0), '#')
-        self.assertEqual(board.getField(0,1), '#')
-        self.assertEqual(board.getField(1,0), '.')
-        self.assertEqual(board.getField(1,1), '#')
+        self.assertEqual(board.getField(0,0).getValue(), '#')
+        self.assertEqual(board.getField(0,1).getValue(), '#')
+        self.assertEqual(board.getField(1,0).getValue(), '.')
+        self.assertEqual(board.getField(1,1).getValue(), '#')
 
     ############### FAKEINPUTREADER ###############
 
@@ -178,30 +179,31 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertTrue(True)
 
     def test_gameReportRound(self):
-        test = []
+        test = ["GAMEBOARDSTART 3,3","###", "###", "###", "GAMEBOARDEND", "END"]
         app = g.game(reader.fakeInputReader(test))
+        app.run()
         r = gameRound.gameRound()
         self.assertEqual(r.getRound(),1)
         bot = gameBot.gameBot()
-        self.assertEquals(bot.getPosition()[0],0)
-        self.assertEquals(bot.getPosition()[1],0)
-        inputText = "ROUND 3 13,21"
+        self.assertEquals(bot.getField().getX(),0)
+        self.assertEquals(bot.getField().getY(),0)
+        inputText = "ROUND 3 3,1"
         app.reportRound(inputText,r,bot)
         self.assertEqual(r.getRound(),3)
-        self.assertEquals(bot.getPosition()[0],12)
-        self.assertEquals(bot.getPosition()[1],20)
+        self.assertEquals(bot.getField().getX(),2)
+        self.assertEquals(bot.getField().getY(),0)
 
     def test_gameFlood(self):
         testBoard = ["GAMEBOARDSTART 1,1","#", "GAMEBOARDEND", "END"]
         app = g.game(reader.fakeInputReader(testBoard))
         app.run()
-        self.assertEqual(app.getGameBoard().getField(0,0),"#")
+        self.assertEqual(app.getGameBoard().getField(0,0).getValue(),"#")
         app.floodField("FLOOD 0,0")
-        self.assertEqual(app.getGameBoard().getField(0,0),"o")
+        self.assertEqual(app.getGameBoard().getField(0,0).getValue(),"o")
         app.floodField("FLOOD 0,0")
-        self.assertEqual(app.getGameBoard().getField(0,0),".")
+        self.assertEqual(app.getGameBoard().getField(0,0).getValue(),".")
         app.floodField("FLOOD 0,0")
-        self.assertEqual(app.getGameBoard().getField(0,0),".")
+        self.assertEqual(app.getGameBoard().getField(0,0).getValue(),".")
 
     def test_gameIncrFlood(self):
         test = []
@@ -218,12 +220,12 @@ class TestSequenceFunctions(unittest.TestCase):
         testBoard = ["oxf", "jlk", "GAMEBOARDEND", "END"]
         app = g.game(reader.fakeInputReader(testBoard))
         board = app.readGameBoard("GAMEBOARDSTART 3,2")
-        self.assertEqual(board.getField(0,0),"o")
-        self.assertEqual(board.getField(0,1),"j")
-        self.assertEqual(board.getField(1,0),"x")
-        self.assertEqual(board.getField(1,1),"l")
-        self.assertEqual(board.getField(2,0),"f")
-        self.assertEqual(board.getField(2,1),"k")
+        self.assertEqual(board.getField(0,0).getValue(),"o")
+        self.assertEqual(board.getField(0,1).getValue(),"j")
+        self.assertEqual(board.getField(1,0).getValue(),"x")
+        self.assertEqual(board.getField(1,1).getValue(),"l")
+        self.assertEqual(board.getField(2,0).getValue(),"f")
+        self.assertEqual(board.getField(2,1).getValue(),"k")
 
 if __name__ == "__main__":
     unittest.main()
