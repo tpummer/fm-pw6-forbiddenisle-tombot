@@ -177,6 +177,14 @@ class gameBot(object):
                             print "GO WEST"
                             nextTurn = d.direction.WEST
                             gone = True
+
+                        if(westNeighbour is not None and westNeighbour.getValue() is '.'
+                           and southNeighbour is not None and southNeighbour.getValue() is '.'
+                           and eastNeighbour is not None and eastNeighbour.getValue() is '.'
+                           and northNeighbour is not None and northNeighbour.getValue() is '.'):
+                            print "GO CURRENT"
+                            nextTurn = d.direction.CURRENT
+                            gone = True
                 self.go(board,nextTurn)
                 #print str(self.getField().getX()) + " " + str(self.getField().getY())
                 sys.stdout.flush()
