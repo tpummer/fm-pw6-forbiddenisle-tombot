@@ -40,18 +40,34 @@ class TestSequenceFunctions(unittest.TestCase):
 
     def test_gameBotDry(self):
         bot = gameBot.gameBot()
-        board = gameBoard.gameBoard(1,1)
-        self.assertEqual(board.getField(0,0).getValue(), '#')
+        board = gameBoard.gameBoard(2,2)
+        bot.setField(board.getField(0,1))
+        self.assertEqual(board.getField(0,1).getValue(), '#')
         bot.dry(board, d.direction.CURRENT)
-        self.assertEqual(board.getField(0,0).getValue(), '#')
-        board.setField(0,0,'o')
-        self.assertEqual(board.getField(0,0).getValue(), 'o')
+        self.assertEqual(board.getField(0,1).getValue(), '#')
+        board.setField(0,1,'o')
+        self.assertEqual(board.getField(0,1).getValue(), 'o')
         bot.dry(board, d.direction.CURRENT)
-        self.assertEqual(board.getField(0,0).getValue(), '#')
-        board.setField(0,0,'.')
-        self.assertEqual(board.getField(0,0).getValue(), '.')
+        self.assertEqual(board.getField(0,1).getValue(), '#')
+        board.setField(0,1,'.')
+        self.assertEqual(board.getField(0,1).getValue(), '.')
         bot.dry(board, d.direction.CURRENT)
-        self.assertEqual(board.getField(0,0).getValue(), '.')
+        self.assertEqual(board.getField(0,1).getValue(), '.')
+
+    def test_gameBotCalcNextTurn(self):
+        board = gameBoard.gameBoard(3,3)
+        board.setField(1,0,'o')
+        board.setField(0,1,'o')
+        board.setField(1,2,'o')
+        board.setField(2,1,'.')
+        board.updateFloodCount()
+        bot = gameBot.gameBot()
+        bot.setField(board.getField(1,1))
+        self.assertEquals(bot.calcNextTurn(board, 0),d.direction.CURRENT)
+        bot.setField(board.getField(1,2))
+        self.assertEquals(bot.calcNextTurn(board, 0),d.direction.NORTH)
+        bot.setField(board.getField(2,2))
+        self.assertEquals(bot.calcNextTurn(board, 0),d.direction.CURRENT)
 
     ############### GAMEROUND ###############
 
@@ -141,6 +157,109 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertEqual(board.getField(1,0).getValue(), '.')
         self.assertEqual(board.getField(1,1).getValue(), '#')
 
+    def test_gameBoardCalcFloodCount(self):
+        board = gameBoard.gameBoard(3,3)
+        self.assertEqual(board.calcFloodCount(board.getField(1,1)),0)
+        #felder befuellen
+        board.getField(1,0).setValue('o')
+        board.getField(0,1).setValue('o')
+        board.getField(1,2).setValue('o')
+        board.getField(2,1).setValue('.')
+        #calc auf innenliegendes
+        self.assertEqual(board.calcFloodCount(board.getField(1,1)),3)
+        #calc auf am randliegendes
+        self.assertEqual(board.calcFloodCount(board.getField(0,2)),2)
+        self.assertEqual(board.calcFloodCount(board.getField(2,2)),1)
+        self.assertEqual(board.calcFloodCount(board.getField(0,1)),1)
+
+    def test_gameBoardUpdateFloodCount(self):
+        board = gameBoard.gameBoard(3,3)
+        board.updateFloodCount()
+        self.assertEqual(board.getField(1,1).getFloodCount(),0)
+        #felder befuellen
+        board.getField(1,0).setValue('o')
+        board.getField(0,1).setValue('o')
+        board.getField(1,2).setValue('o')
+        board.getField(2,1).setValue('.')
+        board.updateFloodCount()
+        #calc auf innenliegendes
+        self.assertEqual(board.getField(1,1).getFloodCount(),3)
+        #calc auf am randliegendes
+        self.assertEqual(board.getField(0,2).getFloodCount(),2)
+        self.assertEqual(board.getField(2,2).getFloodCount(),1)
+        self.assertEqual(board.getField(0,1).getFloodCount(),1)
+
+    def test_gameBoardFloodFieldUpdatesFloodCount(self):
+        board = gameBoard.gameBoard(3,3)
+        board.updateFloodCount()
+        self.assertEqual(board.getField(1,1).getFloodCount(),0)
+        #felder befuellen
+        board.floodField(1,0)
+        board.floodField(0,1)
+        board.floodField(1,2)
+        board.floodField(2,1)
+        board.floodField(2,1)
+        #calc auf innenliegendes
+        self.assertEqual(board.getField(1,1).getFloodCount(),3)
+        #calc auf am randliegendes
+        self.assertEqual(board.getField(0,2).getFloodCount(),2)
+        self.assertEqual(board.getField(2,2).getFloodCount(),1)
+        self.assertEqual(board.getField(0,1).getFloodCount(),1)
+
+    def test_gameBoardIsValidField(self):
+        board = gameBoard.gameBoard(3,3)
+        self.assertFalse(board.isValidField((-1,-1)))
+        self.assertFalse(board.isValidField((0,-1)))
+        self.assertFalse(board.isValidField((1,-1)))
+        self.assertFalse(board.isValidField((2,-1)))
+        self.assertFalse(board.isValidField((3,-1)))
+        self.assertFalse(board.isValidField((-1,0)))
+        self.assertTrue(board.isValidField((0,0)))
+        self.assertTrue(board.isValidField((1,0)))
+        self.assertTrue(board.isValidField((2,0)))
+        self.assertFalse(board.isValidField((3,0)))
+        self.assertFalse(board.isValidField((-1,1)))
+        self.assertTrue(board.isValidField((0,1)))
+        self.assertTrue(board.isValidField((1,1)))
+        self.assertTrue(board.isValidField((2,1)))
+        self.assertFalse(board.isValidField((3,1)))
+        self.assertFalse(board.isValidField((-1,2)))
+        self.assertTrue(board.isValidField((0,2)))
+        self.assertTrue(board.isValidField((1,2)))
+        self.assertTrue(board.isValidField((2,2)))
+        self.assertFalse(board.isValidField((3,2)))
+        self.assertFalse(board.isValidField((-1,3)))
+        self.assertFalse(board.isValidField((0,3)))
+        self.assertFalse(board.isValidField((1,3)))
+        self.assertFalse(board.isValidField((2,3)))
+        self.assertFalse(board.isValidField((3,3)))
+
+    def test_gameBoardGetNeighbour(self):
+        board = gameBoard.gameBoard(3,3)
+        field = board.getField(1,1)
+        northField = board.getNeighbour(field,d.direction.NORTH)
+        self.assertEquals(northField.getX(),1)
+        self.assertEquals(northField.getY(),0)
+        nonField = board.getNeighbour(northField,d.direction.NORTH)
+        self.assertEquals(nonField, None)
+        
+        
+
+    ############### GAMEFIELD ###############
+
+    def test_gameFieldGetVales(self):
+        field = gameBoard.field(3,2,'#')
+        self.assertEqual(field.getValue(), '#')
+        self.assertEqual(field.getX(), 3)
+        self.assertEqual(field.getY(), 2)
+        self.assertEqual(field.getFloodCount(), 0)
+
+    def test_gameFieldFloodCount(self):
+        field = gameBoard.field(3,2,'#')
+        self.assertEqual(field.getFloodCount(), 0)
+        field.setFloodCount(20)
+        self.assertEqual(field.getFloodCount(), 20)
+
     ############### FAKEINPUTREADER ###############
 
     def test_inputReaderFakeInputReaderReadLines(self):
@@ -177,6 +296,103 @@ class TestSequenceFunctions(unittest.TestCase):
         app = g.game(reader.fakeInputReader(fooTillEnd))
         app.run()
         self.assertTrue(True)
+
+    def test_runTillEndExtended(self):
+        inputText = ["GAMEBOARDSTART 38,18",
+                     "...ooooo.....oooooooo..........ooooo..",
+                     "..oo#ooooo...ooo###ooo...o.oooooooooo.",
+                     "oooo##oooo..oo######ooooooooo####ooooo",
+                     ".o######ooo.o#####ooooo..oo###oo##ooo.",
+                     ".oo######oo.oo###oooo...oo##oo.oo##o..",
+                     "ooo######o..o#######ooo.oo##oo..oo##oo",
+                     ".ooo##ooo..oo########oooooo##oooo##oo.",
+                     ".ooo####oo#####oooo#####oooo##oo##ooo.",
+                     "..oooo#######oooo.ooooooooooo###oooo..",
+                     "...ooooo####ooo...ooo....oooo##oooo...",
+                     ".....ooo###oo.....oooo..oooo##oo......",
+                     "....oo####oooooo...oooooooo##oooo.....",
+                     "..ooooo########ooooo.oooo###ooooooo...",
+                     "oooo######ooo####ooo.oo###oooooo......",
+                     "ooo########ooo#####oo####oooo.........",
+                     ".ooo########.#####oo#######oooo.......",
+                     "..oooo###############oooooooo.........",
+                     "....oooooo..oooooo..ooooo.............",
+                     "GAMEBOARDEND",
+                     "END"]
+        #ROUND 1 24,8"
+        app = g.game(reader.fakeInputReader(inputText))
+        app.run()
+        bot = app.getBot()
+        bot.setField(app.getGameBoard().getField(24,8))
+        nextTurn = bot.calcNextTurn(app.getGameBoard(),0+1)
+        self.assertEquals(nextTurn, d.direction.CURRENT)
+        bot.makeTurn(app.getGameBoard())
+
+    def test_runTillEndExtendedTwo(self):
+        inputText = ["GAMEBOARDSTART 38,18",
+                     "...ooooo.....oooooooo..........ooooo..",
+                     "..oo#ooooo...ooo###ooo...o.oooooooooo.",
+                     "oooo##oooo..oo######ooooooooo####ooooo",
+                     ".o######ooo.o#####ooooo..oo###oo##ooo.",
+                     ".oo######oo.oo###oooo...oo##oo.oo##o..",
+                     "ooo######o..o#######ooo.oo##oo..oo##oo",
+                     ".ooo##ooo..oo########oooooo##oooo##oo.",
+                     ".ooo####oo#####oooo#####oooo##oo##ooo.",
+                     "..oooo#######oooo.ooooooooooo###oooo..",
+                     "...ooooo####ooo...ooo....oooo##oooo...",
+                     ".....ooo###oo.....oooo..oooo##oo......",
+                     "....oo####oooooo...oooooooo##oooo.....",
+                     "..ooooo########ooooo.oooo###ooooooo...",
+                     "oooo######ooo####ooo.oo###oooooo......",
+                     "ooo########ooo#####oo####oooo.........",
+                     ".ooo########.#####oo#######oooo.......",
+                     "..oooo###############oooooooo.........",
+                     "....oooooo..oooooo..ooooo.............",
+                     "GAMEBOARDEND",
+                     #"ROUND 5 16,7",
+                     "END"]
+        app = g.game(reader.fakeInputReader(inputText))
+        app.run()
+        bot = app.getBot()
+        bot.setField(app.getGameBoard().getField(15,6))
+        self.assertEquals(bot.getField().getValue(),'#')
+        nextTurn = bot.calcNextTurn(app.getGameBoard(),0+1)
+        self.assertEquals(nextTurn, d.direction.SOUTH)
+
+    def test_runTillEndExtendedTwo(self):
+        inputText = ["GAMEBOARDSTART 3,4",
+                     "...",
+                     "o#.",
+                     "###",
+                     "###",
+                     "GAMEBOARDEND",
+                     "END"]
+        app = g.game(reader.fakeInputReader(inputText))
+        app.run()
+        bot = app.getBot()
+        bot.setField(app.getGameBoard().getField(1,2))
+        self.assertEquals(bot.getField().getValue(),'#')
+        nextTurn = bot.calcNextTurn(app.getGameBoard(),0+1)
+        self.assertEquals(nextTurn, d.direction.NORTH)
+        bot.makeTurn(app.getGameBoard())
+
+    def test_runTillEndExtendedThree(self):
+        print "complex2----------------------------"
+        inputText = ["GAMEBOARDSTART 3,3",
+                     "#..",
+                     "##.",
+                     "#.o",
+                     "GAMEBOARDEND",
+                     "END"]
+        app = g.game(reader.fakeInputReader(inputText))
+        app.run()
+        bot = app.getBot()
+        bot.setField(app.getGameBoard().getField(1,1))
+        self.assertEquals(bot.getField().getValue(),'#')
+        #nextTurn = bot.calcNextTurn(app.getGameBoard(),0+1)
+        bot.makeTurn(app.getGameBoard())
+        print "--------------------------"
+        
 
     def test_gameReportRound(self):
         test = ["GAMEBOARDSTART 3,3","###", "###", "###", "GAMEBOARDEND", "END"]

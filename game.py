@@ -68,6 +68,8 @@ class game(object):
                     board.setField(x,y,inputText[x:x+1])
 
             y = y + 1
+
+        board.updateFloodCount()
         
         return board
 
@@ -76,3 +78,6 @@ class game(object):
 
     def getGameBoard(self):
         return self.gameBoard
+
+    def getBot(self):
+        return self.bot
