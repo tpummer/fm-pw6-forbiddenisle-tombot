@@ -1,3 +1,19 @@
+#fm-pw6-forbiddenisle aka TomBot - Bot for the Freies Magazin 6th programming challenge
+#    Copyright (C) 2013  Thomas Pummer
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 import gameBoard as b
 import direction as d
 import sys
@@ -160,9 +176,9 @@ class gameBot(object):
                             gone = True
 
                         if((westNeighbour is None or neighbourIsNotAccessable(westNeighbour))
-                           and (westNeighbour is None or neighbourIsNotAccessable(westNeighbour))
-                           and (westNeighbour is None or neighbourIsNotAccessable(westNeighbour))
-                           and (westNeighbour is None or neighbourIsNotAccessable(westNeighbour))):
+                           and (southNeighbour is None or neighbourIsNotAccessable(southNeighbour))
+                           and (eastNeighbour is None or neighbourIsNotAccessable(eastNeighbour))
+                           and (northNeighbour is None or neighbourIsNotAccessable(northNeighbour))):
                             print "GO CURRENT"
                             nextTurn = d.direction.CURRENT
                             gone = True
