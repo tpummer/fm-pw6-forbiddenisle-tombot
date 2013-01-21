@@ -27,45 +27,38 @@ class gameBot(object):
 
     def calcNextTurn(self, board, turn):
         bestMove = d.direction.CURRENT
-        #print "curr " + str(self.getField().getX()) + " " + str(self.getField().getY())
         bestMoveCount = self.getField().getFloodCount()
         if(bestMoveCount == 0):
             turn = turn -1
-        #print bestMoveCount
 
         northNeighbour = board.getNeighbour(self.getField(),d.direction.NORTH)
         if(northNeighbour is not None and northNeighbour.getValue() is not '.'):
             if(northNeighbour.getFloodCount() - turn > bestMoveCount):
                 bestMoveCount = northNeighbour.getFloodCount()
                 bestMove = d.direction.NORTH
-                #print "north"
 
         westNeighbour = board.getNeighbour(self.getField(),d.direction.WEST)    
         if(westNeighbour is not None and westNeighbour.getValue() is not '.'):
             if(westNeighbour.getFloodCount() - turn > bestMoveCount):
                 bestMoveCount = westNeighbour.getFloodCount()
                 bestMove = d.direction.WEST
-                #print "west"
 
         southNeighbour = board.getNeighbour(self.getField(),d.direction.SOUTH)    
         if(southNeighbour is not None and southNeighbour.getValue() is not '.'):
             if(southNeighbour.getFloodCount() - turn > bestMoveCount):
                 bestMoveCount = southNeighbour.getFloodCount()
                 bestMove = d.direction.SOUTH
-                #print "south"
 
         eastNeighbour = board.getNeighbour(self.getField(),d.direction.EAST)    
         if(eastNeighbour is not None and eastNeighbour.getValue() is not '.'):
             if(eastNeighbour.getFloodCount() - turn > bestMoveCount):
                 bestMoveCount = eastNeighbour.getFloodCount()
                 bestMove = d.direction.EAST
-                #print "east"
 
         return bestMove
 
     ## NOUNITTEST only executes strategy
     def makeTurn(self, board):
-        #print"AHAHAHAH"
         #self.drySimple(board)
         self.tryCleanmost(board)
 
@@ -85,10 +78,8 @@ class gameBot(object):
         nextField = False
         while(turns < 3):
             nextTurn = self.calcNextTurn(board, turns + 1)
-            #print "next: "+nextTurn
 
             if(nextTurn == d.direction.CURRENT and not nextField):
-                #print "in"
                 if(self.getField().getValue() == 'o'):
                     print "DRY CURRENT"
                     sys.stdout.flush()
@@ -97,20 +88,10 @@ class gameBot(object):
 
 
                 while(turns < 3 and not nextField and self.calcNextTurn(board, turns + 1) == d.direction.CURRENT):
-                    #print "while"
                     northNeighbour = board.getNeighbour(self.getField(),d.direction.NORTH)
-                    #if(northNeighbour is not None):
-                    #    print "north"
                     eastNeighbour = board.getNeighbour(self.getField(),d.direction.EAST)
-                    #if(eastNeighbour is not None):
-                    #    print "east" + str(eastNeighbour.getX()) +" "+str(eastNeighbour.getY())
-                    #    print board.getNeighbour(self.getField(),d.direction.EAST).getValue()
                     southNeighbour = board.getNeighbour(self.getField(),d.direction.SOUTH)
-                    #if(southNeighbour is not None):
-                    #    print "south"
                     westNeighbour = board.getNeighbour(self.getField(),d.direction.WEST)
-                    #if(westNeighbour is not None):
-                    #    print "west"
                     
                     if(northNeighbour is not None and northNeighbour.getValue() == 'o'):
                         print "DRY NORTH"
@@ -133,7 +114,6 @@ class gameBot(object):
                         self.dry(board, d.direction.WEST)
                         turns = turns + 1
                     else:
-                        #print "next"
                         nextField = True
             else:
                 if(nextTurn == d.direction.NORTH):
@@ -145,7 +125,6 @@ class gameBot(object):
                 elif(nextTurn == d.direction.WEST):
                     print "GO WEST"
                 else:
-                    #print "else"
                     gone = False
                     while(not gone):
                         newDirection = randrange(4)
@@ -154,12 +133,6 @@ class gameBot(object):
                         eastNeighbour = board.getNeighbour(self.getField(),d.direction.EAST)
                         southNeighbour = board.getNeighbour(self.getField(),d.direction.SOUTH)
                         westNeighbour = board.getNeighbour(self.getField(),d.direction.WEST)
-                        #if(westNeighbour is '.'):
-                        #    print "bla"
-                        #if(westNeighbour.getValue() is not '.'):
-                        #    print "bla2"
-
-                        #print newDirection
                         
                         if(newDirection == 0 and northNeighbour is not None and northNeighbour.getValue() is not '.'):
                             print "GO NORTH"
@@ -185,8 +158,21 @@ class gameBot(object):
                             print "GO CURRENT"
                             nextTurn = d.direction.CURRENT
                             gone = True
+
+                        if((westNeighbour is None or neighbourIsNotAccessable(westNeighbour))
+                           and (westNeighbour is None or neighbourIsNotAccessable(westNeighbour))
+                           and (westNeighbour is None or neighbourIsNotAccessable(westNeighbour))
+                           and (westNeighbour is None or neighbourIsNotAccessable(westNeighbour))):
+                            print "GO CURRENT"
+                            nextTurn = d.direction.CURRENT
+                            gone = True
                 self.go(board,nextTurn)
-                #print str(self.getField().getX()) + " " + str(self.getField().getY())
                 sys.stdout.flush()
                 turns = turns + 1
                 nextField = False
+def neighbourIsNotAccessable(neighbourField):
+    if(neighbourField is not None and neighbourField.getValue() is '.'):
+        return True
+    else:
+        return False
+        pass

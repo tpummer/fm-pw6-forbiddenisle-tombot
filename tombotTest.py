@@ -392,7 +392,6 @@ class TestSequenceFunctions(unittest.TestCase):
         bot.makeTurn(app.getGameBoard())
 
     def test_runTillEndExtendedFour(self):
-        print "complex3----------------------------"
         inputText = ["GAMEBOARDSTART 3,3",
                      "...",
                      ".o.",
@@ -406,7 +405,23 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertEquals(bot.getField().getValue(),'o')
         nextTurn = bot.calcNextTurn(app.getGameBoard(),0+1)
         bot.makeTurn(app.getGameBoard())
-        print "--------------------------"
+
+    def test_runTillEndExtendedFour(self):
+        print "start"
+        inputText = ["GAMEBOARDSTART 3,3",
+                     ".o.",
+                     "o.o",
+                     ".o.",
+                     "GAMEBOARDEND",
+                     "END"]
+        app = g.game(reader.fakeInputReader(inputText))
+        app.run()
+        bot = app.getBot()
+        bot.setField(app.getGameBoard().getField(1,2))
+        self.assertEquals(bot.getField().getValue(),'o')
+        nextTurn = bot.calcNextTurn(app.getGameBoard(),0+1)
+        self.assertEquals(nextTurn, d.direction.CURRENT)
+        bot.makeTurn(app.getGameBoard())
         
 
     def test_gameReportRound(self):
