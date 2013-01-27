@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 #fm-pw6-forbiddenisle aka TomBot - Bot for the Freies Magazin 6th programming challenge
 #    Copyright (C) 2013  Thomas Pummer
 #
@@ -13,8 +15,6 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-#!/usr/bin/env python
 
 import os, sys, string
 import game as g
